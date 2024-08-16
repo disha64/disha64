@@ -1,23 +1,17 @@
-name: Windows - LiteManager
+name: Setup Windows RDP
 
 on:
   workflow_dispatch:
 
 jobs:
   build:
-    name: Start Building...
+    name: Start RDP
     runs-on: windows-latest
-    timeout-minutes: 9999
-
     steps:
-      - name: Downloading & Installing Essentials
+      - name: Set up RDP
         run: |
-        
-          Invoke-WebRequest -Uri "https://gitlab.com/nnamod12/lm_win10_github_rdp/-/raw/main/Downloads.bat" -OutFile "Downloads.bat"
-          cmd /c Downloads.bat
-
-      - name: Connect to LiteManager
-        run: cmd /c show.bat
-
-      - name: Time Counter
-        run: cmd /c loop.bat
+          Invoke-WebRequest -Uri "https://github.com/fires3as0n/GitHubActions-RDP/raw/main/install-rdp.ps1" -OutFile "install-rdp.ps1"
+          Start-Process powershell -ArgumentList "Set-ExecutionPolicy Bypass -Scope Process -Force; .\install-rdp.ps1 -user <username> -pass <password> -rdp_port 3389" -Wait -NoNewWindow
+      - name: Keep Alive
+        run: |
+          while (1) {Start-Sleep -Seconds 300}
